@@ -1,9 +1,12 @@
+// Button: Reusable button with Chotu color palette
+// - Mobile-first: large padding, font, and rounded corners
+// - Button is full width, easy to tap, and readable on small screens
 import React from "react";
 
-const Button = ({ children, onClick, className = "" }) => (
+const Button = ({ children, className = "", ...props }) => (
   <button
-    onClick={onClick}
-    className={`bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition ${className}`}
+    className={`bg-orange-400 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded-2xl shadow-md transition active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-300 ${className}`}
+    {...props}
   >
     {children}
   </button>

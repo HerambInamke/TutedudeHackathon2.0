@@ -1,17 +1,19 @@
 import React from "react";
+import { Store } from "lucide-react";
+import Header from "../../components/Header";
 
-const SellerDashboard = () => {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Seller Dashboard</h1>
-      <p className="mb-2">Welcome to your dashboard, Seller!</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Example cards or dashboard widgets can go here */}
-        <div className="bg-white p-4 rounded shadow">Today's Orders</div>
-        <div className="bg-white p-4 rounded shadow">Inventory</div>
+// Simple placeholder for seller dashboard
+const SellerDashboard = () => (
+  <div className="min-h-screen bg-gray-100 flex flex-col">
+    <Header title="Supplier Dashboard" />
+    <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center gap-4">
+        <Store size={48} className="text-blue-600" />
+        <div className="text-xl font-bold text-gray-900">Supplier Dashboard</div>
+        <div className="text-gray-500 text-center">Features coming soon!</div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default SellerDashboard; 

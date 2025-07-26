@@ -7,11 +7,14 @@ const BuyerDashboard = lazy(() => import("../pages/Buyer/BuyerDashboard"));
 const OrderMilk = lazy(() => import("../pages/Buyer/OrderMilk"));
 const MyOrders = lazy(() => import("../pages/Buyer/MyOrders"));
 const SellerDashboard = lazy(() => import("../pages/Seller/SellerDashboard"));
+const SplashPage = lazy(() => import("../pages/SplashPage"));
 
 const PageRoutes = () => (
   <Router>
     <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
       <Routes>
+        {/* Splash */}
+        <Route path="/" element={<SplashPage />} />
         {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -21,8 +24,8 @@ const PageRoutes = () => (
         <Route path="/buyer/my-orders" element={<MyOrders />} />
         {/* Seller */}
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
-        {/* Default route */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {/* Default route: redirect all unknown routes to splash */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   </Router>

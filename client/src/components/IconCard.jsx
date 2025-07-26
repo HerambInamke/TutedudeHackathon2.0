@@ -1,11 +1,17 @@
+// IconCard: Reusable icon + label card for dashboards
+// - Mobile-first: large padding, font, and rounded corners
+// - Button is full width, easy to tap, and readable on small screens
 import React from "react";
 
-const IconCard = ({ icon, title, description }) => (
-  <div className="flex flex-col items-center bg-white p-4 rounded shadow w-48">
-    <div className="mb-2 text-3xl">{icon}</div>
-    <h2 className="font-bold text-lg mb-1">{title}</h2>
-    <p className="text-gray-600 text-sm text-center">{description}</p>
-  </div>
+const IconCard = ({ icon, label, onClick }) => (
+  <button
+    className="flex items-center gap-4 bg-white rounded-2xl shadow-md p-5 w-full text-lg font-semibold text-gray-900 justify-center active:scale-95 transition focus:outline-none focus:ring-2 focus:ring-orange-300"
+    onClick={onClick}
+    type="button"
+  >
+    <span>{icon}</span>
+    <span>{label}</span>
+  </button>
 );
 
 export default IconCard; 
