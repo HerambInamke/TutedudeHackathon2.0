@@ -4,7 +4,8 @@
 // - Layout is single column, max-w-xs for best fit on small screens
 import React, { useState } from "react";
 import Header from "../../components/Header";
-import { List, CheckCircle, Clock } from "lucide-react";
+import { List } from "lucide-react";
+import { BadgeCheck, Loader2 } from "lucide-react";
 
 // Dummy orders data
 const DUMMY_ORDERS = [
@@ -49,14 +50,14 @@ const MyOrders = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   {order.status === "Delivered" ? (
-                    <CheckCircle className="text-emerald-400" size={20} />
+                    <BadgeCheck className="h-5 w-5 text-emerald-500" />
                   ) : (
-                    <Clock className="text-orange-400" size={20} />
+                    <Loader2 className="h-5 w-5 text-orange-400 animate-spin" />
                   )}
                   <span
                     className={`text-xs font-bold ${
                       order.status === "Delivered"
-                        ? "text-emerald-400"
+                        ? "text-emerald-500"
                         : "text-orange-400"
                     }`}
                   >

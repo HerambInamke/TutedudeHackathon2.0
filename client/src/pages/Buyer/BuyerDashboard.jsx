@@ -2,12 +2,13 @@
 // - Mobile-first: single column, large IconCards, generous spacing
 // - All buttons/cards are touch-friendly and readable on small screens
 import React, { useState } from "react";
-import { ShoppingCart, List, Users, FileText } from "lucide-react";
+import { Package2, BadgeCheck, Users2, FileText } from "lucide-react";
 import IconCard from "../../components/IconCard";
 import Modal from "../../components/Modal";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 
+// Buyer dashboard with 4 main actions
 const BuyerDashboard = () => {
   const navigate = useNavigate();
   const [modal, setModal] = useState(null);
@@ -18,22 +19,22 @@ const BuyerDashboard = () => {
       <div className="flex flex-col gap-6 p-4 flex-1">
         <div className="grid grid-cols-1 gap-4">
           <IconCard
-            icon={<ShoppingCart size={36} className="text-orange-400" />}
+            icon={<Package2 className="h-9 w-9 text-orange-400" />}
             label="Order Milk"
             onClick={() => navigate("/buyer/order-milk")}
           />
           <IconCard
-            icon={<List size={36} className="text-blue-600" />}
+            icon={<BadgeCheck className="h-9 w-9 text-blue-600" />}
             label="My Orders"
             onClick={() => navigate("/buyer/my-orders")}
           />
           <IconCard
-            icon={<Users size={36} className="text-emerald-400" />}
+            icon={<Users2 className="h-9 w-9 text-emerald-400" />}
             label="Group Buy"
             onClick={() => setModal("group")}
           />
           <IconCard
-            icon={<FileText size={36} className="text-orange-400" />}
+            icon={<FileText className="h-9 w-9 text-orange-400" />}
             label="Today's Accounts"
             onClick={() => setModal("accounts")}
           />
