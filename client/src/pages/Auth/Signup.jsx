@@ -151,14 +151,14 @@ const Signup = () => {
         
         <div className="flex flex-col gap-2">
           <label className="text-gray-700 text-sm flex items-center gap-1">
-            <UserPlus size={16} className="text-orange-400" /> Username
+            <UserPlus size={16} className="text-orange-400" /> Name
           </label>
           <input
             type="text"
             className="p-2 border rounded text-base"
-            placeholder="Your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
             disabled={loading}
           />
