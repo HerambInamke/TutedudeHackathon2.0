@@ -12,8 +12,15 @@ const groupBuyRoutes = require('./routes/groupBuy.routes');
 
 const app = express();
 
+// Environment-based CORS configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json()); // To parse JSON bodies
 
 app.use('/api/auth', authRoutes);
@@ -38,6 +45,15 @@ mongoose.connect(process.env.MONGO_URI,{family: 4})
 // Basic Route
 app.get('/', (req, res) => {
   res.send('Tutedude Hackathon Backend is Running!');
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
 });
 
 // TODO: Add your feature routes here
