@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import Header from "../../components/Header";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
+import { Milk, Coffee, Candy, Bread, Soup, ShoppingCart, Leaf, EggFried, Smile } from "lucide-react";
 
 const PRODUCTS = [
-  { id: 1, name: "Sugar", unit: "kg", price: 45 },
-  { id: 2, name: "Tea Powder", unit: "kg", price: 320 },
-  { id: 3, name: "Potato", unit: "kg", price: 30 },
-  { id: 4, name: "Pav", unit: "pack (6)", price: 25 },
-  { id: 5, name: "Masala (Vada Pav)", unit: "pack", price: 40 },
-  { id: 6, name: "Milk", unit: "L", price: 50 },
-  { id: 7, name: "Coffee Powder", unit: "kg", price: 400 },
-  { id: 8, name: "Snacks Mix", unit: "pack", price: 60 },
+  { id: 1, name: "Sugar", icon: <Candy size={36} className="text-pink-400" />, unit: "kg", price: 45 },
+  { id: 2, name: "Tea Powder", icon: <Leaf size={36} className="text-green-600" />, unit: "kg", price: 320 },
+  { id: 3, name: "Potato", icon: <EggFried size={36} className="text-yellow-700" />, unit: "kg", price: 30 },
+  { id: 4, name: "Pav", icon: <Bread size={36} className="text-yellow-500" />, unit: "pack (6)", price: 25 },
+  { id: 5, name: "Masala (Vada Pav)", icon: <Soup size={36} className="text-orange-500" />, unit: "pack", price: 40 },
+  { id: 6, name: "Milk", icon: <Milk size={36} className="text-blue-400" />, unit: "L", price: 50 },
+  { id: 7, name: "Coffee Powder", icon: <Coffee size={36} className="text-brown-600" />, unit: "kg", price: 400 },
+  { id: 8, name: "Snacks Mix", icon: <Smile size={36} className="text-emerald-400" />, unit: "pack", price: 60 },
 ];
 
 const OtherProducts = () => {
@@ -19,8 +20,11 @@ const OtherProducts = () => {
   const [showSummary, setShowSummary] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const handleQtyChange = (id, value) => {
-    setQuantities((prev) => ({ ...prev, [id]: Math.max(0, Number(value)) }));
+  const handleQtyChange = (id, delta) => {
+    setQuantities((prev) => {
+      const newQty = Math.max(0, (prev[id] || 0) + delta);
+      return { ...prev, [id]: newQty };
+    });
   };
 
   const handleOrder = (e) => {
@@ -43,38 +47,33 @@ const OtherProducts = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      <Header title="Order Other Products" />
+      <Header title=" " />
       <form className="flex flex-col items-center justify-center flex-1 gap-6 p-4" onSubmit={handleOrder}>
-        <div className="bg-white rounded-2xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-4">
-          <div className="text-lg font-semibold text-gray-900 mb-2">Select Products</div>
-          <div className="w-full flex flex-col gap-3">
+        <div className="bg-white rounded-2xl shadow-md p-4 w-full max-w-xs flex flex-col items-center gap-4">
+          <div className="grid grid-cols-2 gap-4 w-full">
             {PRODUCTS.map((product) => (
-              <div key={product.id} className="flex items-center gap-2 justify-between">
-                <span className="font-medium text-gray-800">{product.name}</span>
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
-                  className="w-16 p-1 border rounded text-base text-center"
-                  value={quantities[product.id]}
-                  onChange={(e) => handleQtyChange(product.id, e.target.value)}
-                />
-                <span className="text-xs text-gray-500">{product.unit}</span>
+              <div key={product.id} className="flex flex-col items-center justify-center gap-2 p-2">
+                <div>{product.icon}</div>
+                <div className="flex items-center gap-2 mt-1">
+                  <button type="button" className="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center text-2xl font-bold" onClick={() => handleQtyChange(product.id, -1)}>-</button>
+                  <span className="text-xl font-bold text-gray-900 w-6 text-center">{quantities[product.id]}</span>
+                  <button type="button" className="bg-orange-300 rounded-full w-8 h-8 flex items-center justify-center text-2xl font-bold text-white" onClick={() => handleQtyChange(product.id, 1)}>+</button>
+                </div>
                 <span className="text-xs text-blue-600 font-bold">₹{product.price}/{product.unit}</span>
               </div>
             ))}
           </div>
-          <Button type="submit" className="w-full mt-4">
-            Order Now
+          <Button type="submit" className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
+            <ShoppingCart size={24} />
           </Button>
         </div>
       </form>
       {/* Order Summary Modal */}
-      <Modal isOpen={showSummary} onClose={() => setShowSummary(false)} title="Order Summary">
+      <Modal isOpen={showSummary} onClose={() => setShowSummary(false)} title=" ">
         <div className="flex flex-col gap-2 p-2 text-gray-900">
           {selectedProducts.map((p) => (
             <div key={p.id} className="flex justify-between items-center">
-              <span>{p.name} ({quantities[p.id]} {p.unit})</span>
+              <span className="flex items-center gap-2">{p.icon} {quantities[p.id]} {p.unit}</span>
               <span>₹{p.price * quantities[p.id]}</span>
             </div>
           ))}
@@ -82,17 +81,18 @@ const OtherProducts = () => {
             <span>Total:</span>
             <span className="text-blue-600">₹{total}</span>
           </div>
-          <Button onClick={handleConfirm} className="w-full mt-2">
-            Confirm Order
+          <Button onClick={handleConfirm} className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
+            <ShoppingCart size={24} />
           </Button>
         </div>
       </Modal>
       {/* Success Modal */}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="Order Placed!">
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title=" ">
         <div className="flex flex-col items-center gap-2 p-2">
-          <div className="text-gray-900 font-semibold">Your order was placed successfully!</div>
-          <Button onClick={() => setShowModal(false)} className="mt-2 w-full">
-            OK
+          <Smile size={40} className="text-emerald-400" />
+          <div className="text-gray-900 font-semibold text-center">Order placed!</div>
+          <Button onClick={() => setShowModal(false)} className="mt-2 w-full flex items-center justify-center gap-2 text-lg">
+            <ShoppingCart size={24} />
           </Button>
         </div>
       </Modal>

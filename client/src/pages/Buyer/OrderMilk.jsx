@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import Header from "../../components/Header";
-import { ShoppingCart, Calendar, Clock } from "lucide-react";
+import { ShoppingCart, Calendar, Clock, Milk, User } from "lucide-react";
 
 // Dummy milk price per litre
 const MILK_PRICE = 50;
@@ -93,140 +93,118 @@ const OrderMilk = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      <Header title="Order Milk" />
+      <Header title=" " />
       <div className="flex flex-col items-center justify-center flex-1 gap-6 p-4">
         {/* Supplier Comparison Table */}
         <div className="bg-white rounded-2xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-4 mb-4">
-          <div className="text-lg font-semibold text-gray-900 mb-2">Compare Suppliers</div>
-          {loadingSuppliers ? (
-            <div className="text-gray-500">Loading suppliers...</div>
-          ) : suppliers.length === 0 ? (
-            <div className="text-gray-500">No suppliers found in your area.</div>
-          ) : (
+          <div className="flex flex-col items-center gap-2 w-full">
+            <Milk size={48} className="text-blue-400 mb-2" />
             <div className="w-full flex flex-col gap-2">
-              {suppliers.map((supplier) => (
-                <button
-                  key={supplier.id}
-                  type="button"
-                  className={`flex flex-col items-start w-full p-3 rounded-xl border-2 transition shadow-sm text-left ${
-                    selectedSupplier && selectedSupplier.id === supplier.id
-                      ? "border-orange-400 bg-orange-50"
-                      : "border-gray-200 bg-white"
-                  }`}
-                  onClick={() => setSelectedSupplier(supplier)}
-                >
-                  <div className="flex justify-between w-full items-center">
-                    <span className="font-bold text-gray-900">{supplier.name}</span>
+              {loadingSuppliers ? (
+                <div className="text-gray-500 flex items-center justify-center"><User className="mr-2" />...</div>
+              ) : suppliers.length === 0 ? (
+                <div className="text-gray-500 flex items-center justify-center"><User className="mr-2" />No sellers</div>
+              ) : (
+                suppliers.map((supplier) => (
+                  <button
+                    key={supplier.id}
+                    type="button"
+                    className={`flex items-center justify-between w-full p-3 rounded-xl border-2 transition shadow-sm text-left ${
+                      selectedSupplier && selectedSupplier.id === supplier.id
+                        ? "border-orange-400 bg-orange-50"
+                        : "border-gray-200 bg-white"
+                    }`}
+                    onClick={() => setSelectedSupplier(supplier)}
+                  >
+                    <span className="flex items-center gap-2">
+                      <User className="text-blue-400" size={28} />
+                      <span className="text-lg font-bold text-gray-900">{supplier.name}</span>
+                    </span>
                     <span className="text-blue-600 font-bold text-lg">₹{supplier.price}/L</span>
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">{supplier.address}</div>
-                </button>
-              ))}
+                  </button>
+                ))
+              )}
             </div>
-          )}
+          </div>
         </div>
         {/* Order Form */}
         <form
           className="bg-white rounded-2xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-4"
           onSubmit={handleOrder}
         >
-          <ShoppingCart size={40} className="text-orange-400 mb-2" />
-          <div className="text-lg font-semibold text-gray-900 mb-2">Select Quantity</div>
-          <div className="flex flex-wrap gap-2 justify-center">
-            {[1, 2, 5, 10].map((q) => (
-              <button
-                key={q}
-                type="button"
-                className={`px-4 py-2 rounded-2xl border-2 font-bold text-lg shadow-sm transition ${
-                  quantity === q && !customQty
-                    ? "bg-orange-400 text-white border-orange-400"
-                    : "bg-white text-gray-900 border-gray-300"
-                }`}
-                onClick={() => handleQtyClick(q)}
+          <div className="flex flex-col items-center gap-2 w-full">
+            <div className="flex items-center justify-center gap-4 w-full mb-2">
+              <button type="button" className="bg-gray-200 rounded-full w-10 h-10 flex items-center justify-center text-3xl font-bold" onClick={() => handleQtyClick(Math.max(1, quantity - 1))}>-</button>
+              <span className="text-2xl font-bold text-gray-900 w-10 text-center">{quantity}</span>
+              <button type="button" className="bg-orange-300 rounded-full w-10 h-10 flex items-center justify-center text-3xl font-bold text-white" onClick={() => handleQtyClick(quantity + 1)}>+</button>
+              <Milk size={32} className="text-blue-400 ml-2" />
+            </div>
+            {/* Date picker */}
+            <div className="w-full flex items-center gap-2 mt-2">
+              <Calendar className="text-blue-600" size={24} />
+              <input
+                type="date"
+                className="flex-1 p-2 border rounded-2xl text-base"
+                value={date}
+                min={new Date().toISOString().split("T")[0]}
+                onChange={(e) => setDate(e.target.value)}
+                required
+              />
+            </div>
+            {/* Time slot dropdown */}
+            <div className="w-full flex items-center gap-2 mt-2">
+              <Clock className="text-blue-600" size={24} />
+              <select
+                className="flex-1 p-2 border rounded-2xl text-base"
+                value={timeSlot}
+                onChange={(e) => setTimeSlot(e.target.value)}
               >
-                {q}L
-              </button>
-            ))}
+                {TIME_SLOTS.map((slot) => (
+                  <option key={slot} value={slot}>
+                    {slot}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="text-gray-700 text-base mt-2">
+              <span className="font-bold text-blue-600">₹{selectedSupplier ? selectedSupplier.price * quantity : "-"}</span>
+            </div>
+            <Button type="submit" className="w-full mt-4 flex items-center justify-center gap-2 text-lg">
+              <ShoppingCart size={24} />
+            </Button>
           </div>
-          {/* Custom quantity input */}
-          <div className="w-full flex items-center gap-2 mt-2">
-            <input
-              type="number"
-              min="0.1"
-              step="0.1"
-              placeholder="Custom (L)"
-              className="flex-1 p-2 border rounded-2xl text-base"
-              value={customQty}
-              onChange={handleCustomQty}
-            />
-            <span className="text-gray-500 text-sm">L</span>
-          </div>
-          {/* Date picker */}
-          <div className="w-full flex items-center gap-2 mt-2">
-            <Calendar className="text-blue-600" size={20} />
-            <input
-              type="date"
-              className="flex-1 p-2 border rounded-2xl text-base"
-              value={date}
-              min={new Date().toISOString().split("T")[0]}
-              onChange={(e) => setDate(e.target.value)}
-              required
-            />
-          </div>
-          {/* Time slot dropdown */}
-          <div className="w-full flex items-center gap-2 mt-2">
-            <Clock className="text-blue-600" size={20} />
-            <select
-              className="flex-1 p-2 border rounded-2xl text-base"
-              value={timeSlot}
-              onChange={(e) => setTimeSlot(e.target.value)}
-            >
-              {TIME_SLOTS.map((slot) => (
-                <option key={slot} value={slot}>
-                  {slot}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="text-gray-700 text-base mt-2">
-            Price: <span className="font-bold text-blue-600">₹{selectedSupplier ? selectedSupplier.price * quantity : "-"}</span>
-          </div>
-          <Button type="submit" className="w-full mt-4">
-            Order Now
-          </Button>
         </form>
       </div>
       {/* Order Summary Modal */}
       <Modal
         isOpen={showSummary}
         onClose={() => setShowSummary(false)}
-        title="Order Summary"
+        title=" "
       >
         <div className="flex flex-col gap-2 p-2 text-gray-900">
           <div className="flex items-center gap-2">
-            <ShoppingCart className="text-orange-400" size={20} />
-            <span className="font-semibold">Supplier:</span> {selectedSupplier ? selectedSupplier.name : "-"}
+            <Milk className="text-blue-400" size={28} />
+            <span className="font-semibold">{selectedSupplier ? selectedSupplier.name : "-"}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-semibold">Price:</span> ₹{selectedSupplier ? selectedSupplier.price : "-"}/L
+            <span className="font-semibold">₹{selectedSupplier ? selectedSupplier.price : "-"}/L</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-semibold">Quantity:</span> {quantity}L
+            <span className="font-semibold">{quantity}L</span>
           </div>
           <div className="flex items-center gap-2">
             <Calendar className="text-blue-600" size={20} />
-            <span className="font-semibold">Date:</span> {date}
+            <span className="font-semibold">{date}</span>
           </div>
           <div className="flex items-center gap-2">
             <Clock className="text-blue-600" size={20} />
-            <span className="font-semibold">Time Slot:</span> {timeSlot}
+            <span className="font-semibold">{timeSlot}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-semibold">Total:</span>
             <span className="text-blue-600 font-bold">₹{selectedSupplier ? selectedSupplier.price * quantity : "-"}</span>
           </div>
-          <Button onClick={handleConfirm} className="w-full mt-2">
-            Confirm Order
+          <Button onClick={handleConfirm} className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
+            <ShoppingCart size={24} />
           </Button>
         </div>
       </Modal>
@@ -234,13 +212,13 @@ const OrderMilk = () => {
       <Modal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        title="Order Placed!"
+        title=" "
       >
         <div className="flex flex-col items-center gap-2 p-2">
-          <ShoppingCart size={32} className="text-emerald-400" />
-          <div className="text-gray-900 font-semibold">Your milk order was placed successfully!</div>
-          <Button onClick={() => setShowModal(false)} className="mt-2 w-full">
-            OK
+          <Milk size={40} className="text-blue-400" />
+          <div className="text-gray-900 font-semibold text-center">Order placed!</div>
+          <Button onClick={() => setShowModal(false)} className="mt-2 w-full flex items-center justify-center gap-2 text-lg">
+            <ShoppingCart size={24} />
           </Button>
         </div>
       </Modal>

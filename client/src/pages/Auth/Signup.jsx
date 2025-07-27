@@ -16,7 +16,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
 
-  // Unified signup handler for buyers (username + phone) and sellers (name + phone)
+  // Unified signup handler for buyers (username + phone) and sellers (name + phone + password)
   const handleSignup = (e) => {
     e.preventDefault();
     if (role === "buyer") {
@@ -26,14 +26,6 @@ const Signup = () => {
       }
       if (!/^[0-9]{10}$/.test(phone)) {
         alert("Please enter a valid 10-digit phone number.");
-        return;
-      }
-      if (!password || password.length < 4) {
-        alert("Password must be at least 4 characters.");
-        return;
-      }
-      if (password !== confirm) {
-        alert("Passwords do not match.");
         return;
       }
       // Dummy: redirect to login
@@ -113,32 +105,36 @@ const Signup = () => {
             required
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <label className="text-gray-700 text-sm flex items-center gap-1">
-            <Lock size={16} className="text-blue-600" /> Password
-          </label>
-          <input
-            type="password"
-            className="p-2 border rounded text-base"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label className="text-gray-700 text-sm flex items-center gap-1">
-            <Lock size={16} className="text-orange-400" /> Confirm Password
-          </label>
-          <input
-            type="password"
-            className="p-2 border rounded text-base"
-            placeholder="Confirm password"
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            required
-          />
-        </div>
+        {role === "seller" && (
+          <>
+            <div className="flex flex-col gap-2">
+              <label className="text-gray-700 text-sm flex items-center gap-1">
+                <Lock size={16} className="text-blue-600" /> Password
+              </label>
+              <input
+                type="password"
+                className="p-2 border rounded text-base"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-gray-700 text-sm flex items-center gap-1">
+                <Lock size={16} className="text-orange-400" /> Confirm Password
+              </label>
+              <input
+                type="password"
+                className="p-2 border rounded text-base"
+                placeholder="Confirm password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                required
+              />
+            </div>
+          </>
+        )}
         {/* Role selection */}
         <div className="flex gap-4 justify-center mt-2">
           <label className="flex items-center gap-1">

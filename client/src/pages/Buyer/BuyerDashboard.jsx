@@ -2,7 +2,7 @@
 // - Mobile-first: single column, large IconCards, generous spacing
 // - All buttons/cards are touch-friendly and readable on small screens
 import React, { useState } from "react";
-import { Package2, BadgeCheck, Users2, FileText } from "lucide-react";
+import { Package2, BadgeCheck, FileText, ShoppingCart, Soup } from "lucide-react";
 import IconCard from "../../components/IconCard";
 import Modal from "../../components/Modal";
 import Header from "../../components/Header";
@@ -15,55 +15,40 @@ const BuyerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      <Header title="Buyer Dashboard" />
+      <Header title=" " />
       <div className="flex flex-col gap-6 p-4 flex-1">
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <IconCard
-            icon={<Package2 className="h-9 w-9 text-orange-400" />}
-            label="Order Milk"
+            icon={<Package2 className="h-16 w-16 text-orange-400" />} // Milk
+            label=""
             onClick={() => navigate("/buyer/order-milk")}
           />
           <IconCard
-            icon={<BadgeCheck className="h-9 w-9 text-blue-600" />}
-            label="My Orders"
+            icon={<BadgeCheck className="h-16 w-16 text-blue-600" />} // My Orders
+            label=""
             onClick={() => navigate("/buyer/my-orders")}
           />
-          {/* <IconCard
-            icon={<Users2 className="h-9 w-9 text-emerald-400" />}
-            label="Group Buy"
-            onClick={() => setModal("group")}
-          /> */}
           <IconCard
-            icon={<FileText className="h-9 w-9 text-orange-400" />}
-            label="Today's Accounts"
+            icon={<FileText className="h-16 w-16 text-orange-400" />} // Today's Accounts
+            label=""
             onClick={() => setModal("accounts")}
           />
           <IconCard
-            icon={<Package2 className="h-9 w-9 text-emerald-600" />}
-            label="Order Other Products"
+            icon={<ShoppingCart className="h-16 w-16 text-emerald-600" />} // Other Products
+            label=""
             onClick={() => navigate("/buyer/other-products")}
           />
         </div>
       </div>
-      {/* Placeholder modals */}
-      {/*
-      <Modal
-        isOpen={modal === "group"}
-        onClose={() => setModal(null)}
-        title="Group Buy"
-      >
-        <div className="text-center text-gray-700 p-2">
-          Group Buy feature coming soon!
-        </div>
-      </Modal>
-      */}
+      {/* Only keep the accounts modal for now */}
       <Modal
         isOpen={modal === "accounts"}
         onClose={() => setModal(null)}
-        title="Today's Accounts"
+        title=" "
       >
-        <div className="text-center text-gray-700 p-2">
-          Accounts summary coming soon!
+        <div className="flex flex-col items-center gap-2 p-2">
+          <Soup className="h-10 w-10 text-orange-400" />
+          <div className="text-gray-900 font-semibold text-center">Accounts summary coming soon!</div>
         </div>
       </Modal>
     </div>

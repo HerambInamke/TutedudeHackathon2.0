@@ -14,7 +14,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // Unified login handler for buyers (username + phone) and sellers (phone only)
+  // Unified login handler for buyers (username + phone) and sellers (phone + password)
   const handleLogin = (e) => {
     e.preventDefault();
     if (role === "buyer") {
@@ -24,10 +24,6 @@ const Login = () => {
       }
       if (!/^[0-9]{10}$/.test(phone)) {
         alert("Please enter a valid 10-digit phone number.");
-        return;
-      }
-      if (!password) {
-        alert("Please enter your password.");
         return;
       }
       // Dummy: redirect to buyer dashboard
@@ -84,19 +80,21 @@ const Login = () => {
             required
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <label className="text-gray-700 text-sm flex items-center gap-1">
-            <Lock size={16} className="text-blue-600" /> Password
-          </label>
-          <input
-            type="password"
-            className="p-2 border rounded text-base"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        {role === "seller" && (
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 text-sm flex items-center gap-1">
+              <Lock size={16} className="text-blue-600" /> Password
+            </label>
+            <input
+              type="password"
+              className="p-2 border rounded text-base"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+        )}
         {/* Role selection */}
         <div className="flex gap-4 justify-center mt-2">
           <label className="flex items-center gap-1">
