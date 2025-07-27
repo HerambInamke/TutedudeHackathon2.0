@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const khaataRoutes = require('./routes/khaata.routes');
+const supplierRoutes = require('./routes/supplier.routes');
 
 const app = express();
 
@@ -9,8 +11,13 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
-const supplierRoutes = require('./routes/supplier.routes');
 app.use('/api', supplierRoutes);
+// --- Add your feature routes here ---
+// const orderRoutes = require('./routes/order.routes'); // Add this when you build it
+
+app.use('/api', khaataRoutes);
+// app.use('/api', orderRoutes);
+
 
 
 // DB Connection
