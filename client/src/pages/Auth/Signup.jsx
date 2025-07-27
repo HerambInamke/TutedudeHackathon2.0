@@ -24,8 +24,14 @@ const Signup = () => {
       alert("Please enter a valid 10-digit phone number.");
       return;
     }
-    // Dummy: redirect to login
-    navigate("/login");
+    // Simulate authentication by storing user info (role, username, phone)
+    localStorage.setItem("user", JSON.stringify({ username, phone, role }));
+    // Redirect to the selected role's dashboard
+    if (role === "buyer") {
+      navigate("/buyer/dashboard");
+    } else {
+      navigate("/seller/dashboard");
+    }
   };
 
   return (

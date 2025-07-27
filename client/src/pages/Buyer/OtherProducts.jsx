@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Header from "../../components/Header";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
+import Sidebar from "../../components/Sidebar";
 import { Milk, Coffee, Candy, Bread, Soup, ShoppingCart, Leaf, EggFried, Smile } from "lucide-react";
 
 const PRODUCTS = [
@@ -46,56 +47,59 @@ const OtherProducts = () => {
   const total = selectedProducts.reduce((sum, p) => sum + p.price * quantities[p.id], 0);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      <Header title=" " />
-      <form className="flex flex-col items-center justify-center flex-1 gap-6 p-4" onSubmit={handleOrder}>
-        <div className="bg-white rounded-2xl shadow-md p-4 w-full max-w-xs flex flex-col items-center gap-4">
-          <div className="grid grid-cols-2 gap-4 w-full">
-            {PRODUCTS.map((product) => (
-              <div key={product.id} className="flex flex-col items-center justify-center gap-2 p-2">
-                <div>{product.icon}</div>
-                <div className="flex items-center gap-2 mt-1">
-                  <button type="button" className="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center text-2xl font-bold" onClick={() => handleQtyChange(product.id, -1)}>-</button>
-                  <span className="text-xl font-bold text-gray-900 w-6 text-center">{quantities[product.id]}</span>
-                  <button type="button" className="bg-orange-300 rounded-full w-8 h-8 flex items-center justify-center text-2xl font-bold text-white" onClick={() => handleQtyChange(product.id, 1)}>+</button>
+    <div className="min-h-screen bg-gray-100 flex">
+      <Sidebar />
+      <div className="flex flex-col items-center justify-center flex-1 gap-6 p-4 md:ml-64">
+        <Header title=" " />
+        <form className="flex flex-col items-center justify-center flex-1 gap-6 p-4" onSubmit={handleOrder}>
+          <div className="bg-white rounded-2xl shadow-md p-4 w-full max-w-xs flex flex-col items-center gap-4">
+            <div className="grid grid-cols-2 gap-4 w-full">
+              {PRODUCTS.map((product) => (
+                <div key={product.id} className="flex flex-col items-center justify-center gap-2 p-2">
+                  <div>{product.icon}</div>
+                  <div className="flex items-center gap-2 mt-1">
+                    <button type="button" className="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center text-2xl font-bold" onClick={() => handleQtyChange(product.id, -1)}>-</button>
+                    <span className="text-xl font-bold text-gray-900 w-6 text-center">{quantities[product.id]}</span>
+                    <button type="button" className="bg-orange-300 rounded-full w-8 h-8 flex items-center justify-center text-2xl font-bold text-white" onClick={() => handleQtyChange(product.id, 1)}>+</button>
+                  </div>
+                  <span className="text-xs text-blue-600 font-bold">₹{product.price}/{product.unit}</span>
                 </div>
-                <span className="text-xs text-blue-600 font-bold">₹{product.price}/{product.unit}</span>
+              ))}
+            </div>
+            <Button type="submit" className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
+              <ShoppingCart size={24} />
+            </Button>
+          </div>
+        </form>
+        {/* Order Summary Modal */}
+        <Modal isOpen={showSummary} onClose={() => setShowSummary(false)} title=" ">
+          <div className="flex flex-col gap-2 p-2 text-gray-900">
+            {selectedProducts.map((p) => (
+              <div key={p.id} className="flex justify-between items-center">
+                <span className="flex items-center gap-2">{p.icon} {quantities[p.id]} {p.unit}</span>
+                <span>₹{p.price * quantities[p.id]}</span>
               </div>
             ))}
-          </div>
-          <Button type="submit" className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
-            <ShoppingCart size={24} />
-          </Button>
-        </div>
-      </form>
-      {/* Order Summary Modal */}
-      <Modal isOpen={showSummary} onClose={() => setShowSummary(false)} title=" ">
-        <div className="flex flex-col gap-2 p-2 text-gray-900">
-          {selectedProducts.map((p) => (
-            <div key={p.id} className="flex justify-between items-center">
-              <span className="flex items-center gap-2">{p.icon} {quantities[p.id]} {p.unit}</span>
-              <span>₹{p.price * quantities[p.id]}</span>
+            <div className="flex justify-between items-center font-bold mt-2">
+              <span>Total:</span>
+              <span className="text-blue-600">₹{total}</span>
             </div>
-          ))}
-          <div className="flex justify-between items-center font-bold mt-2">
-            <span>Total:</span>
-            <span className="text-blue-600">₹{total}</span>
+            <Button onClick={handleConfirm} className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
+              <ShoppingCart size={24} />
+            </Button>
           </div>
-          <Button onClick={handleConfirm} className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
-            <ShoppingCart size={24} />
-          </Button>
-        </div>
-      </Modal>
-      {/* Success Modal */}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title=" ">
-        <div className="flex flex-col items-center gap-2 p-2">
-          <Smile size={40} className="text-emerald-400" />
-          <div className="text-gray-900 font-semibold text-center">Order placed!</div>
-          <Button onClick={() => setShowModal(false)} className="mt-2 w-full flex items-center justify-center gap-2 text-lg">
-            <ShoppingCart size={24} />
-          </Button>
-        </div>
-      </Modal>
+        </Modal>
+        {/* Success Modal */}
+        <Modal isOpen={showModal} onClose={() => setShowModal(false)} title=" ">
+          <div className="flex flex-col items-center gap-2 p-2">
+            <Smile size={40} className="text-emerald-400" />
+            <div className="text-gray-900 font-semibold text-center">Order placed!</div>
+            <Button onClick={() => setShowModal(false)} className="mt-2 w-full flex items-center justify-center gap-2 text-lg">
+              <ShoppingCart size={24} />
+            </Button>
+          </div>
+        </Modal>
+      </div>
     </div>
   );
 };

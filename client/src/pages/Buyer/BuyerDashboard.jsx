@@ -35,7 +35,7 @@ const BuyerDashboard = () => {
           <div className="flex flex-col items-center">
             <IconCard
               icon={<FileText className="h-16 w-16 text-orange-400" />} // Today's Accounts
-              onClick={() => setModal("accounts")}
+              onClick={() => navigate("/buyer/todays-accounts")}
             />
             <span className="mt-2 text-base font-bold text-gray-800 text-center">Today's Accounts</span>
           </div>
@@ -69,17 +69,6 @@ const BuyerDashboard = () => {
           </button>
         </div>
       </div>
-      {/* Only keep the accounts modal for now */}
-      <Modal
-        isOpen={modal === "accounts"}
-        onClose={() => setModal(null)}
-        title=" "
-      >
-        <div className="flex flex-col items-center gap-2 p-2">
-          <Soup className="h-10 w-10 text-orange-400" />
-          <div className="text-gray-900 font-semibold text-center">Accounts summary coming soon!</div>
-        </div>
-      </Modal>
     </div>
   );
 };

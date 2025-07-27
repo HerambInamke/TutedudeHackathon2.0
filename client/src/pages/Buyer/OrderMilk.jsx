@@ -8,6 +8,10 @@ import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import Header from "../../components/Header";
 import { ShoppingCart, Calendar, Clock, Milk, User } from "lucide-react";
+import Sidebar from "../../components/Sidebar";
+import AddressSelection from "../../components/AddressSelection";
+import SupplierList from "./SupplierList";
+import OrderForm from "./OrderForm";
 
 // Dummy milk price per litre
 const MILK_PRICE = 50;
@@ -23,9 +27,9 @@ const fetchSuppliers = async (latitude, longitude) => {
   // In a real app, fetch from `/api/suppliers?latitude=...&longitude=...`
   // For now, return mock data
   return [
-    { id: 1, name: "Fresh Dairy", price: 48, address: "Street 1, Secunderabad" },
-    { id: 2, name: "Happy Cows", price: 50, address: "Street 2, Secunderabad" },
-    { id: 3, name: "Milkman & Sons", price: 47, address: "Street 3, Secunderabad" },
+    { id: 1, name: "Fresh Dairy", price: 48, address: "Street 1, loni", contact: "9876543210" },
+    { id: 2, name: "Happy Cows", price: 50, address: "Street 2, solapur", contact: "9123456780" },
+    { id: 3, name: "Milkman & Sons", price: 47, address: "Street 3, thane", contact: "9988776655" },
   ];
 };
 
@@ -43,6 +47,9 @@ const OrderMilk = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [loadingSuppliers, setLoadingSuppliers] = useState(true);
+  const [showAddress, setShowAddress] = useState(false);
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
 
   // Fetch suppliers on mount (mock location for now)
   useEffect(() => {
@@ -82,6 +89,14 @@ const OrderMilk = () => {
       alert("Please select a supplier to order from.");
       return;
     }
+    setShowAddress(true);
+  };
+
+  // Handle address submission
+  const handleAddressSubmit = ({ address, phone }) => {
+    setAddress(address);
+    setPhone(phone);
+    setShowAddress(false);
     setShowSummary(true);
   };
 
@@ -92,89 +107,38 @@ const OrderMilk = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      <Header title=" " />
-      <div className="flex flex-col items-center justify-center flex-1 gap-6 p-4">
-        {/* Supplier Comparison Table */}
-        <div className="bg-white rounded-2xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-4 mb-4">
-          <div className="flex flex-col items-center gap-2 w-full">
-            <Milk size={48} className="text-blue-400 mb-2" />
-            <div className="w-full flex flex-col gap-2">
-              {loadingSuppliers ? (
-                <div className="text-gray-500 flex items-center justify-center"><User className="mr-2" />...</div>
-              ) : suppliers.length === 0 ? (
-                <div className="text-gray-500 flex items-center justify-center"><User className="mr-2" />No sellers</div>
-              ) : (
-                suppliers.map((supplier) => (
-                  <button
-                    key={supplier.id}
-                    type="button"
-                    className={`flex items-center justify-between w-full p-3 rounded-xl border-2 transition shadow-sm text-left ${
-                      selectedSupplier && selectedSupplier.id === supplier.id
-                        ? "border-orange-400 bg-orange-50"
-                        : "border-gray-200 bg-white"
-                    }`}
-                    onClick={() => setSelectedSupplier(supplier)}
-                  >
-                    <span className="flex items-center gap-2">
-                      <User className="text-blue-400" size={28} />
-                      <span className="text-lg font-bold text-gray-900">{supplier.name}</span>
-                    </span>
-                    <span className="text-blue-600 font-bold text-lg">₹{supplier.price}/L</span>
-                  </button>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-        {/* Order Form */}
-        <form
-          className="bg-white rounded-2xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-4"
-          onSubmit={handleOrder}
-        >
-          <div className="flex flex-col items-center gap-2 w-full">
-            <div className="flex items-center justify-center gap-4 w-full mb-2">
-              <button type="button" className="bg-gray-200 rounded-full w-10 h-10 flex items-center justify-center text-3xl font-bold" onClick={() => handleQtyClick(Math.max(1, quantity - 1))}>-</button>
-              <span className="text-2xl font-bold text-gray-900 w-10 text-center">{quantity}</span>
-              <button type="button" className="bg-orange-300 rounded-full w-10 h-10 flex items-center justify-center text-3xl font-bold text-white" onClick={() => handleQtyClick(quantity + 1)}>+</button>
-              <Milk size={32} className="text-blue-400 ml-2" />
-            </div>
-            {/* Date picker */}
-            <div className="w-full flex items-center gap-2 mt-2">
-              <Calendar className="text-blue-600" size={24} />
-              <input
-                type="date"
-                className="flex-1 p-2 border rounded-2xl text-base"
-                value={date}
-                min={new Date().toISOString().split("T")[0]}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
-            </div>
-            {/* Time slot dropdown */}
-            <div className="w-full flex items-center gap-2 mt-2">
-              <Clock className="text-blue-600" size={24} />
-              <select
-                className="flex-1 p-2 border rounded-2xl text-base"
-                value={timeSlot}
-                onChange={(e) => setTimeSlot(e.target.value)}
-              >
-                {TIME_SLOTS.map((slot) => (
-                  <option key={slot} value={slot}>
-                    {slot}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="text-gray-700 text-base mt-2">
-              <span className="font-bold text-blue-600">₹{selectedSupplier ? selectedSupplier.price * quantity : "-"}</span>
-            </div>
-            <Button type="submit" className="w-full mt-4 flex items-center justify-center gap-2 text-lg">
-              <ShoppingCart size={24} />
-            </Button>
-          </div>
-        </form>
+    <div className="min-h-screen bg-gray-100 flex">
+      <Sidebar />
+      <div className="flex flex-col items-center justify-center flex-1 gap-10 p-6 md:ml-64">
+        <SupplierList
+          suppliers={suppliers}
+          selectedSupplier={selectedSupplier}
+          onSelect={setSelectedSupplier}
+          loading={loadingSuppliers}
+        />
+        <OrderForm
+          quantity={quantity}
+          setQuantity={setQuantity}
+          date={date}
+          setDate={setDate}
+          timeSlot={timeSlot}
+          setTimeSlot={setTimeSlot}
+          onOrder={handleOrder}
+          selectedSupplier={selectedSupplier}
+        />
       </div>
+      {/* Address Selection Modal */}
+      <Modal
+        isOpen={showAddress}
+        onClose={() => setShowAddress(false)}
+        title="Delivery Details"
+      >
+        <AddressSelection
+          initialAddress={address}
+          initialPhone={phone}
+          onSubmit={handleAddressSubmit}
+        />
+      </Modal>
       {/* Order Summary Modal */}
       <Modal
         isOpen={showSummary}
@@ -202,6 +166,14 @@ const OrderMilk = () => {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-blue-600 font-bold">₹{selectedSupplier ? selectedSupplier.price * quantity : "-"}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Address:</span>
+            <span>{address}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Phone:</span>
+            <span>{phone}</span>
           </div>
           <Button onClick={handleConfirm} className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
             <ShoppingCart size={24} />
