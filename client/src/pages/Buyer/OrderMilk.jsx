@@ -16,7 +16,14 @@ import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import Header from "../../components/Header";
 import { ShoppingCart, Calendar, Clock, Milk, User } from "lucide-react";
+<<<<<<< HEAD
 >>>>>>> a0effacb7956357fa530931938566723480723a5
+=======
+import Sidebar from "../../components/Sidebar";
+import AddressSelection from "../../components/AddressSelection";
+import SupplierList from "./SupplierList";
+import OrderForm from "./OrderForm";
+>>>>>>> fba3abac8a5881ec0b79cf5ad99337649c8cfa19
 
 const TIME_SLOTS = [
   "6:00 AM - 7:00 AM",
@@ -30,9 +37,9 @@ const fetchSuppliers = async (latitude, longitude) => {
   // In a real app, fetch from `/api/suppliers?latitude=...&longitude=...`
   // For now, return mock data
   return [
-    { id: 1, name: "Fresh Dairy", price: 48, address: "Street 1, Secunderabad" },
-    { id: 2, name: "Happy Cows", price: 50, address: "Street 2, Secunderabad" },
-    { id: 3, name: "Milkman & Sons", price: 47, address: "Street 3, Secunderabad" },
+    { id: 1, name: "Fresh Dairy", price: 48, address: "Street 1, loni", contact: "9876543210" },
+    { id: 2, name: "Happy Cows", price: 50, address: "Street 2, solapur", contact: "9123456780" },
+    { id: 3, name: "Milkman & Sons", price: 47, address: "Street 3, thane", contact: "9988776655" },
   ];
 };
 
@@ -84,6 +91,9 @@ const OrderMilk = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [loadingSuppliers, setLoadingSuppliers] = useState(true);
+  const [showAddress, setShowAddress] = useState(false);
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
 
   // Fetch suppliers on mount (mock location for now)
   useEffect(() => {
@@ -133,6 +143,14 @@ const OrderMilk = () => {
 >>>>>>> a0effacb7956357fa530931938566723480723a5
       return;
     }
+    setShowAddress(true);
+  };
+
+  // Handle address submission
+  const handleAddressSubmit = ({ address, phone }) => {
+    setAddress(address);
+    setPhone(phone);
+    setShowAddress(false);
     setShowSummary(true);
   };
 
@@ -197,6 +215,7 @@ const OrderMilk = () => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gray-100 flex flex-col">
 <<<<<<< HEAD
       <Header title="Order Milk" />
@@ -441,6 +460,40 @@ const OrderMilk = () => {
         </form>
       </div>
 >>>>>>> a0effacb7956357fa530931938566723480723a5
+=======
+    <div className="min-h-screen bg-gray-100 flex">
+      <Sidebar />
+      <div className="flex flex-col items-center justify-center flex-1 gap-10 p-6 md:ml-64">
+        <SupplierList
+          suppliers={suppliers}
+          selectedSupplier={selectedSupplier}
+          onSelect={setSelectedSupplier}
+          loading={loadingSuppliers}
+        />
+        <OrderForm
+          quantity={quantity}
+          setQuantity={setQuantity}
+          date={date}
+          setDate={setDate}
+          timeSlot={timeSlot}
+          setTimeSlot={setTimeSlot}
+          onOrder={handleOrder}
+          selectedSupplier={selectedSupplier}
+        />
+      </div>
+      {/* Address Selection Modal */}
+      <Modal
+        isOpen={showAddress}
+        onClose={() => setShowAddress(false)}
+        title="Delivery Details"
+      >
+        <AddressSelection
+          initialAddress={address}
+          initialPhone={phone}
+          onSubmit={handleAddressSubmit}
+        />
+      </Modal>
+>>>>>>> fba3abac8a5881ec0b79cf5ad99337649c8cfa19
       {/* Order Summary Modal */}
       <Modal
         isOpen={showSummary}
@@ -485,6 +538,14 @@ const OrderMilk = () => {
 =======
             <span className="text-blue-600 font-bold">₹{selectedSupplier ? selectedSupplier.price * quantity : "-"}</span>
 >>>>>>> a0effacb7956357fa530931938566723480723a5
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Address:</span>
+            <span>{address}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Phone:</span>
+            <span>{phone}</span>
           </div>
           <Button onClick={handleConfirm} className="w-full mt-2 flex items-center justify-center gap-2 text-lg">
             <ShoppingCart size={24} />

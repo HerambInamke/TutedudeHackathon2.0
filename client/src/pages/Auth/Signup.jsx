@@ -81,6 +81,7 @@ const Signup = () => {
       setError("Please enter a valid 10-digit phone number.");
       return;
     }
+<<<<<<< HEAD
     if (!addressLine1) {
       setError("Please enter your address line 1.");
       return;
@@ -130,6 +131,15 @@ const Signup = () => {
       setError(error.message || "Network error. Please try again.");
     } finally {
       setLoading(false);
+=======
+    // Simulate authentication by storing user info (role, username, phone)
+    localStorage.setItem("user", JSON.stringify({ username, phone, role }));
+    // Redirect to the selected role's dashboard
+    if (role === "buyer") {
+      navigate("/buyer/dashboard");
+    } else {
+      navigate("/seller/dashboard");
+>>>>>>> fba3abac8a5881ec0b79cf5ad99337649c8cfa19
     }
   };
 
