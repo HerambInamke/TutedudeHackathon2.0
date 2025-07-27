@@ -4,30 +4,48 @@
 // - Layout is single column, max-w-xs for best fit on small screens
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Store, Phone, Lock } from "lucide-react";
+import { User, Store, Phone } from "lucide-react";
 import Button from "../../components/Button";
+import { api } from "../../utils/api";
 
 const Login = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("buyer");
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Dummy login handler: just redirects based on role
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+    
     if (!/^[0-9]{10}$/.test(phone)) {
-      alert("Please enter a valid 10-digit phone number.");
+      setError("Please enter a valid 10-digit phone number.");
       return;
     }
-    if (!password) {
-      alert("Please enter your password.");
-      return;
-    }
-    if (role === "buyer") {
-      navigate("/buyer/dashboard");
-    } else {
-      navigate("/seller/dashboard");
+
+    setLoading(true);
+    try {
+      const data = await api.auth.login(phone);
+
+      if (data.success) {
+        // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(data.data));
+        
+        // Redirect based on user role
+        if (data.data.role === "buyer") {
+          navigate("/buyer/dashboard");
+        } else {
+          navigate("/seller/dashboard");
+        }
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError(error.message || "Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,6 +58,13 @@ const Login = () => {
         <h2 className="text-2xl font-bold text-gray-900 text-center mb-2 flex items-center justify-center gap-2">
           <Phone className="text-orange-400" /> Login
         </h2>
+        
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm">
+            {error}
+          </div>
+        )}
+        
         <div className="flex flex-col gap-2">
           <label className="text-gray-700 text-sm flex items-center gap-1">
             <Phone size={16} className="text-blue-600" /> Phone Number
@@ -52,21 +77,10 @@ const Login = () => {
             onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ""))}
             maxLength={10}
             required
+            disabled={loading}
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <label className="text-gray-700 text-sm flex items-center gap-1">
-            <Lock size={16} className="text-blue-600" /> Password
-          </label>
-          <input
-            type="password"
-            className="p-2 border rounded text-base"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        
         {/* Role selection */}
         <div className="flex gap-4 justify-center mt-2">
           <label className="flex items-center gap-1">
@@ -76,6 +90,7 @@ const Login = () => {
               value="buyer"
               checked={role === "buyer"}
               onChange={() => setRole("buyer")}
+              disabled={loading}
             />
             <User size={18} className="text-orange-400" /> Buyer
           </label>
@@ -86,13 +101,16 @@ const Login = () => {
               value="seller"
               checked={role === "seller"}
               onChange={() => setRole("seller")}
+              disabled={loading}
             />
             <Store size={18} className="text-blue-600" /> Seller
           </label>
         </div>
-        <Button type="submit" className="mt-2 w-full">
-          Login
+        
+        <Button type="submit" className="mt-2 w-full" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
         </Button>
+        
         <div className="text-center text-sm text-gray-500 mt-2">
           New to Chotu?{" "}
           <span

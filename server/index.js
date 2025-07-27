@@ -4,6 +4,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const khaataRoutes = require('./routes/khaata.routes');
 const supplierRoutes = require('./routes/supplier.routes');
+const authRoutes = require('./routes/auth.routes');
+const productRoutes = require('./routes/product.routes');
+const ratingRoutes = require('./routes/rating.routes');
+const orderRoutes = require('./routes/order.routes');
+const groupBuyRoutes = require('./routes/groupBuy.routes');
 
 const app = express();
 
@@ -11,6 +16,11 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/ratings', ratingRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/groupbuy', groupBuyRoutes);
 app.use('/api', supplierRoutes);
 // --- Add your feature routes here ---
 // const orderRoutes = require('./routes/order.routes'); // Add this when you build it
