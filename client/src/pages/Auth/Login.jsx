@@ -80,7 +80,6 @@ const Login = () => {
             disabled={loading}
           />
         </div>
-        
         {/* Role selection */}
         <div className="flex gap-4 justify-center mt-2">
           <label className="flex items-center gap-1">

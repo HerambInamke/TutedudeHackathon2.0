@@ -3,14 +3,13 @@
 // - Button is full width, easy to tap, and readable on small screens
 import React from "react";
 
-const IconCard = ({ icon, label, onClick }) => (
+const IconCard = ({ icon, onClick }) => (
   <button
-    className="flex items-center gap-4 bg-white rounded-2xl shadow-md p-5 w-full text-lg font-semibold text-gray-900 justify-center active:scale-95 transition focus:outline-none focus:ring-2 focus:ring-orange-300"
+    className="flex items-center justify-center bg-white rounded-2xl shadow-md p-6 w-full h-32 active:scale-95 transition focus:outline-none focus:ring-2 focus:ring-orange-300"
     onClick={onClick}
     type="button"
   >
-    <span>{icon}</span>
-    <span>{label}</span>
+    <span className="flex items-center justify-center w-full h-full">{icon}</span>
   </button>
 );
 
