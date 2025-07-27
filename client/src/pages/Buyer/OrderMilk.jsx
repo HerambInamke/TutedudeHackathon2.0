@@ -3,7 +3,7 @@
 // - Inputs, buttons, and modals are large and easy to tap
 // - Layout is single column, max-w-xs for best fit on small screens
 // - Modal summary is scrollable if content overflows
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import Header from "../../components/Header";
@@ -18,6 +18,17 @@ const TIME_SLOTS = [
   "9:00 AM - 10:00 AM",
 ];
 
+// Mock function to simulate fetching suppliers with milk prices
+const fetchSuppliers = async (latitude, longitude) => {
+  // In a real app, fetch from `/api/suppliers?latitude=...&longitude=...`
+  // For now, return mock data
+  return [
+    { id: 1, name: "Fresh Dairy", price: 48, address: "Street 1, Secunderabad" },
+    { id: 2, name: "Happy Cows", price: 50, address: "Street 2, Secunderabad" },
+    { id: 3, name: "Milkman & Sons", price: 47, address: "Street 3, Secunderabad" },
+  ];
+};
+
 const OrderMilk = () => {
   const [quantity, setQuantity] = useState(1);
   const [customQty, setCustomQty] = useState("");
@@ -29,6 +40,23 @@ const OrderMilk = () => {
   const [timeSlot, setTimeSlot] = useState(TIME_SLOTS[0]);
   const [showSummary, setShowSummary] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [suppliers, setSuppliers] = useState([]);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [loadingSuppliers, setLoadingSuppliers] = useState(true);
+
+  // Fetch suppliers on mount (mock location for now)
+  useEffect(() => {
+    const getSuppliers = async () => {
+      setLoadingSuppliers(true);
+      // Use mock coordinates for now
+      const latitude = 17.4399;
+      const longitude = 78.4983;
+      const data = await fetchSuppliers(latitude, longitude);
+      setSuppliers(data);
+      setLoadingSuppliers(false);
+    };
+    getSuppliers();
+  }, []);
 
   // Handle quantity selection (preset or custom)
   const handleQtyClick = (q) => {
@@ -50,6 +78,10 @@ const OrderMilk = () => {
       alert("Please select or enter a valid quantity.");
       return;
     }
+    if (!selectedSupplier) {
+      alert("Please select a supplier to order from.");
+      return;
+    }
     setShowSummary(true);
   };
 
@@ -62,11 +94,42 @@ const OrderMilk = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <Header title="Order Milk" />
-      <form
-        className="flex flex-col items-center justify-center flex-1 gap-6 p-4"
-        onSubmit={handleOrder}
-      >
-        <div className="bg-white rounded-2xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center justify-center flex-1 gap-6 p-4">
+        {/* Supplier Comparison Table */}
+        <div className="bg-white rounded-2xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-4 mb-4">
+          <div className="text-lg font-semibold text-gray-900 mb-2">Compare Suppliers</div>
+          {loadingSuppliers ? (
+            <div className="text-gray-500">Loading suppliers...</div>
+          ) : suppliers.length === 0 ? (
+            <div className="text-gray-500">No suppliers found in your area.</div>
+          ) : (
+            <div className="w-full flex flex-col gap-2">
+              {suppliers.map((supplier) => (
+                <button
+                  key={supplier.id}
+                  type="button"
+                  className={`flex flex-col items-start w-full p-3 rounded-xl border-2 transition shadow-sm text-left ${
+                    selectedSupplier && selectedSupplier.id === supplier.id
+                      ? "border-orange-400 bg-orange-50"
+                      : "border-gray-200 bg-white"
+                  }`}
+                  onClick={() => setSelectedSupplier(supplier)}
+                >
+                  <div className="flex justify-between w-full items-center">
+                    <span className="font-bold text-gray-900">{supplier.name}</span>
+                    <span className="text-blue-600 font-bold text-lg">₹{supplier.price}/L</span>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">{supplier.address}</div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {/* Order Form */}
+        <form
+          className="bg-white rounded-2xl shadow-md p-6 w-full max-w-xs flex flex-col items-center gap-4"
+          onSubmit={handleOrder}
+        >
           <ShoppingCart size={40} className="text-orange-400 mb-2" />
           <div className="text-lg font-semibold text-gray-900 mb-2">Select Quantity</div>
           <div className="flex flex-wrap gap-2 justify-center">
@@ -126,13 +189,13 @@ const OrderMilk = () => {
             </select>
           </div>
           <div className="text-gray-700 text-base mt-2">
-            Price: <span className="font-bold text-blue-600">₹{MILK_PRICE * quantity}</span>
+            Price: <span className="font-bold text-blue-600">₹{selectedSupplier ? selectedSupplier.price * quantity : "-"}</span>
           </div>
           <Button type="submit" className="w-full mt-4">
             Order Now
           </Button>
-        </div>
-      </form>
+        </form>
+      </div>
       {/* Order Summary Modal */}
       <Modal
         isOpen={showSummary}
@@ -142,6 +205,12 @@ const OrderMilk = () => {
         <div className="flex flex-col gap-2 p-2 text-gray-900">
           <div className="flex items-center gap-2">
             <ShoppingCart className="text-orange-400" size={20} />
+            <span className="font-semibold">Supplier:</span> {selectedSupplier ? selectedSupplier.name : "-"}
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">Price:</span> ₹{selectedSupplier ? selectedSupplier.price : "-"}/L
+          </div>
+          <div className="flex items-center gap-2">
             <span className="font-semibold">Quantity:</span> {quantity}L
           </div>
           <div className="flex items-center gap-2">
@@ -154,7 +223,7 @@ const OrderMilk = () => {
           </div>
           <div className="flex items-center gap-2">
             <span className="font-semibold">Total:</span>
-            <span className="text-blue-600 font-bold">₹{MILK_PRICE * quantity}</span>
+            <span className="text-blue-600 font-bold">₹{selectedSupplier ? selectedSupplier.price * quantity : "-"}</span>
           </div>
           <Button onClick={handleConfirm} className="w-full mt-2">
             Confirm Order

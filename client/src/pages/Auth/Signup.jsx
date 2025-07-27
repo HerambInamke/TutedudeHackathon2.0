@@ -10,32 +10,54 @@ import Button from "../../components/Button";
 const Signup = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("buyer");
+  const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
 
-  // Dummy signup handler: just redirects to login or dashboard
+  // Unified signup handler for buyers (username + phone) and sellers (name + phone)
   const handleSignup = (e) => {
     e.preventDefault();
-    if (!name) {
-      alert("Please enter your name.");
-      return;
+    if (role === "buyer") {
+      if (!username) {
+        alert("Please enter your username.");
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(phone)) {
+        alert("Please enter a valid 10-digit phone number.");
+        return;
+      }
+      if (!password || password.length < 4) {
+        alert("Password must be at least 4 characters.");
+        return;
+      }
+      if (password !== confirm) {
+        alert("Passwords do not match.");
+        return;
+      }
+      // Dummy: redirect to login
+      navigate("/login");
+    } else {
+      if (!name) {
+        alert("Please enter your name.");
+        return;
+      }
+      if (!/^[0-9]{10}$/.test(phone)) {
+        alert("Please enter a valid 10-digit phone number.");
+        return;
+      }
+      if (!password || password.length < 4) {
+        alert("Password must be at least 4 characters.");
+        return;
+      }
+      if (password !== confirm) {
+        alert("Passwords do not match.");
+        return;
+      }
+      // Dummy: redirect to login
+      navigate("/login");
     }
-    if (!/^[0-9]{10}$/.test(phone)) {
-      alert("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    if (!password || password.length < 4) {
-      alert("Password must be at least 4 characters.");
-      return;
-    }
-    if (password !== confirm) {
-      alert("Passwords do not match.");
-      return;
-    }
-    // Dummy: redirect to login
-    navigate("/login");
   };
 
   return (
@@ -47,19 +69,36 @@ const Signup = () => {
         <h2 className="text-2xl font-bold text-gray-900 text-center mb-2 flex items-center justify-center gap-2">
           <UserPlus className="text-blue-600" /> Sign Up
         </h2>
-        <div className="flex flex-col gap-2">
-          <label className="text-gray-700 text-sm flex items-center gap-1">
-            <UserPlus size={16} className="text-orange-400" /> Name
-          </label>
-          <input
-            type="text"
-            className="p-2 border rounded text-base"
-            placeholder="Your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
+        {role === "buyer" && (
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 text-sm flex items-center gap-1">
+              <UserPlus size={16} className="text-orange-400" /> Username
+            </label>
+            <input
+              type="text"
+              className="p-2 border rounded text-base"
+              placeholder="Your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required={role === "buyer"}
+            />
+          </div>
+        )}
+        {role === "seller" && (
+          <div className="flex flex-col gap-2">
+            <label className="text-gray-700 text-sm flex items-center gap-1">
+              <UserPlus size={16} className="text-orange-400" /> Name
+            </label>
+            <input
+              type="text"
+              className="p-2 border rounded text-base"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required={role === "seller"}
+            />
+          </div>
+        )}
         <div className="flex flex-col gap-2">
           <label className="text-gray-700 text-sm flex items-center gap-1">
             <Phone size={16} className="text-blue-600" /> Phone Number
