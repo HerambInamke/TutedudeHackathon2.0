@@ -3,17 +3,22 @@ import Header from "../../components/Header";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import Sidebar from "../../components/Sidebar";
-import { Milk, Coffee, Candy, Bread, Soup, ShoppingCart, Leaf, EggFried, Smile } from "lucide-react";
+import { Milk, Coffee, Candy, Bread, Soup, ShoppingCart, Leaf, EggFried, Smile, Cookie, CupSoda, Apple, Carrot, ShoppingBasket } from "lucide-react";
 
 const PRODUCTS = [
-  { id: 1, name: "Sugar", icon: <Candy size={36} className="text-pink-400" />, unit: "kg", price: 45 },
-  { id: 2, name: "Tea Powder", icon: <Leaf size={36} className="text-green-600" />, unit: "kg", price: 320 },
-  { id: 3, name: "Potato", icon: <EggFried size={36} className="text-yellow-700" />, unit: "kg", price: 30 },
-  { id: 4, name: "Pav", icon: <Bread size={36} className="text-yellow-500" />, unit: "pack (6)", price: 25 },
-  { id: 5, name: "Masala (Vada Pav)", icon: <Soup size={36} className="text-orange-500" />, unit: "pack", price: 40 },
-  { id: 6, name: "Milk", icon: <Milk size={36} className="text-blue-400" />, unit: "L", price: 50 },
-  { id: 7, name: "Coffee Powder", icon: <Coffee size={36} className="text-brown-600" />, unit: "kg", price: 400 },
-  { id: 8, name: "Snacks Mix", icon: <Smile size={36} className="text-emerald-400" />, unit: "pack", price: 60 },
+  { id: 1, name: "Tea Leaves", icon: <Leaf size={36} className="text-green-600" />, unit: "100g", price: 30 },
+  { id: 2, name: "Sugar", icon: <Candy size={36} className="text-pink-400" />, unit: "kg", price: 45 },
+  { id: 3, name: "Ginger", icon: <Carrot size={36} className="text-orange-700" />, unit: "100g", price: 20 },
+  { id: 4, name: "Biscuits", icon: <Cookie size={36} className="text-yellow-500" />, unit: "pack", price: 25 },
+  { id: 5, name: "Milk", icon: <Milk size={36} className="text-blue-400" />, unit: "L", price: 50 },
+  { id: 6, name: "Coffee Powder", icon: <Coffee size={36} className="text-brown-600" />, unit: "100g", price: 40 },
+  { id: 7, name: "Snacks Mix", icon: <Smile size={36} className="text-emerald-400" />, unit: "pack", price: 60 },
+  { id: 8, name: "Apple", icon: <Apple size={36} className="text-red-500" />, unit: "each", price: 15 },
+  { id: 9, name: "Soft Drink", icon: <CupSoda size={36} className="text-cyan-500" />, unit: "bottle", price: 20 },
+  { id: 10, name: "Bread", icon: <Bread size={36} className="text-yellow-500" />, unit: "pack (6)", price: 25 },
+  { id: 11, name: "Masala (Vada Pav)", icon: <Soup size={36} className="text-orange-500" />, unit: "pack", price: 40 },
+  { id: 12, name: "Potato", icon: <EggFried size={36} className="text-yellow-700" />, unit: "kg", price: 30 },
+  { id: 13, name: "Basket Combo", icon: <ShoppingBasket size={36} className="text-blue-700" />, unit: "combo", price: 120 },
 ];
 
 const OtherProducts = () => {
@@ -50,7 +55,7 @@ const OtherProducts = () => {
     <div className="min-h-screen bg-gray-100 flex">
       <Sidebar />
       <div className="flex flex-col items-center justify-center flex-1 gap-6 p-4 md:ml-64">
-        <Header title=" " />
+        <Header title="Other Products" />
         <form className="flex flex-col items-center justify-center flex-1 gap-6 p-4" onSubmit={handleOrder}>
           <div className="bg-white rounded-2xl shadow-md p-4 w-full max-w-xs flex flex-col items-center gap-4">
             <div className="grid grid-cols-2 gap-4 w-full">
