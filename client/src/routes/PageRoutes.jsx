@@ -11,6 +11,9 @@ const SplashPage = lazy(() => import("../pages/SplashPage"));
 // const GroupBuy = lazy(() => import("../pages/Buyer/GroupBuy"));
 const TodaysAccounts = lazy(() => import("../pages/Buyer/TodaysAccounts"));
 const OtherProducts = lazy(() => import("../pages/Buyer/OtherProducts"));
+const SuppliersList = lazy(() => import("../pages/Buyer/SuppliersList"));
+const Recommendations = lazy(() => import("../pages/Buyer/Recommendations"));
+const LpgReminder = lazy(() => import("../pages/Buyer/LpgReminder"));
 
 const PageRoutes = () => (
   <Router>
@@ -29,6 +32,9 @@ const PageRoutes = () => (
         {/* <Route path="/buyer/group-buy" element={<GroupBuy />} /> */}
         <Route path="/buyer/todays-accounts" element={<TodaysAccounts />} />
         <Route path="/buyer/other-products" element={<OtherProducts />} />
+        <Route path="/buyer/suppliers" element={<SuppliersList />} />
+        <Route path="/buyer/recommendations" element={<Recommendations />} />
+        <Route path="/buyer/lpg-reminder" element={<LpgReminder />} />
         {/* Seller */}
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
         {/* Default route: redirect all unknown routes to splash */}

@@ -5,7 +5,7 @@ import './App.css'
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import PageRoutes from './routes/PageRoutes';
-import './i18n';
+import './translations/i18n';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
 // App.jsx is the root component. It wraps the app in BrowserRouter and renders all routes from PageRoutes.

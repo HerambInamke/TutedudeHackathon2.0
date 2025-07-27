@@ -77,36 +77,20 @@ const Signup = () => {
           </div>
         )}
         {role === "seller" && (
-          <div className="flex flex-col gap-2">
-            <label className="text-gray-700 text-sm flex items-center gap-1">
-              <UserPlus size={16} className="text-orange-400" /> Name
-            </label>
-            <input
-              type="text"
-              className="p-2 border rounded text-base"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required={role === "seller"}
-            />
-          </div>
-        )}
-        <div className="flex flex-col gap-2">
-          <label className="text-gray-700 text-sm flex items-center gap-1">
-            <Phone size={16} className="text-blue-600" /> Phone Number
-          </label>
-          <input
-            type="tel"
-            className="p-2 border rounded text-base"
-            placeholder="10-digit phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ""))}
-            maxLength={10}
-            required
-          />
-        </div>
-        {role === "seller" && (
           <>
+            <div className="flex flex-col gap-2">
+              <label className="text-gray-700 text-sm flex items-center gap-1">
+                <UserPlus size={16} className="text-orange-400" /> Name
+              </label>
+              <input
+                type="text"
+                className="p-2 border rounded text-base"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required={role === "seller"}
+              />
+            </div>
             <div className="flex flex-col gap-2">
               <label className="text-gray-700 text-sm flex items-center gap-1">
                 <Lock size={16} className="text-blue-600" /> Password
