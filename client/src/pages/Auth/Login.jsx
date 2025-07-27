@@ -12,32 +12,22 @@ const Login = () => {
   const [role, setRole] = useState("buyer");
   const [phone, setPhone] = useState("");
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
-  // Unified login handler for buyers (username + phone) and sellers (phone + password)
+  // Unified login handler for both buyers and sellers (username + phone)
   const handleLogin = (e) => {
     e.preventDefault();
+    if (!username) {
+      alert("Please enter your username.");
+      return;
+    }
+    if (!/^[0-9]{10}$/.test(phone)) {
+      alert("Please enter a valid 10-digit phone number.");
+      return;
+    }
+    // Dummy: redirect to dashboard
     if (role === "buyer") {
-      if (!username) {
-        alert("Please enter your username.");
-        return;
-      }
-      if (!/^[0-9]{10}$/.test(phone)) {
-        alert("Please enter a valid 10-digit phone number.");
-        return;
-      }
-      // Dummy: redirect to buyer dashboard
       navigate("/buyer/dashboard");
     } else {
-      if (!/^[0-9]{10}$/.test(phone)) {
-        alert("Please enter a valid 10-digit phone number.");
-        return;
-      }
-      if (!password) {
-        alert("Please enter your password.");
-        return;
-      }
-      // Dummy: redirect to seller dashboard
       navigate("/seller/dashboard");
     }
   };
@@ -51,21 +41,19 @@ const Login = () => {
         <h2 className="text-2xl font-bold text-gray-900 text-center mb-2 flex items-center justify-center gap-2">
           <Phone className="text-orange-400" /> Login
         </h2>
-        {role === "buyer" && (
-          <div className="flex flex-col gap-2">
-            <label className="text-gray-700 text-sm flex items-center gap-1">
-              <User size={16} className="text-orange-400" /> Username
-            </label>
-            <input
-              type="text"
-              className="p-2 border rounded text-base"
-              placeholder="Your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required={role === "buyer"}
-            />
-          </div>
-        )}
+        <div className="flex flex-col gap-2">
+          <label className="text-gray-700 text-sm flex items-center gap-1">
+            <User size={16} className="text-orange-400" /> Username
+          </label>
+          <input
+            type="text"
+            className="p-2 border rounded text-base"
+            placeholder="Your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
         <div className="flex flex-col gap-2">
           <label className="text-gray-700 text-sm flex items-center gap-1">
             <Phone size={16} className="text-blue-600" /> Phone Number
@@ -80,21 +68,6 @@ const Login = () => {
             required
           />
         </div>
-        {role === "seller" && (
-          <div className="flex flex-col gap-2">
-            <label className="text-gray-700 text-sm flex items-center gap-1">
-              <Lock size={16} className="text-blue-600" /> Password
-            </label>
-            <input
-              type="password"
-              className="p-2 border rounded text-base"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-        )}
         {/* Role selection */}
         <div className="flex gap-4 justify-center mt-2">
           <label className="flex items-center gap-1">
