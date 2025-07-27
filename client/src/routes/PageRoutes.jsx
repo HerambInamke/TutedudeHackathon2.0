@@ -8,8 +8,9 @@ const OrderMilk = lazy(() => import("../pages/Buyer/OrderMilk"));
 const MyOrders = lazy(() => import("../pages/Buyer/MyOrders"));
 const SellerDashboard = lazy(() => import("../pages/Seller/SellerDashboard"));
 const SplashPage = lazy(() => import("../pages/SplashPage"));
-const GroupBuy = lazy(() => import("../pages/Buyer/GroupBuy"));
+// const GroupBuy = lazy(() => import("../pages/Buyer/GroupBuy"));
 const TodaysAccounts = lazy(() => import("../pages/Buyer/TodaysAccounts"));
+const OtherProducts = lazy(() => import("../pages/Buyer/OtherProducts"));
 
 const PageRoutes = () => (
   <Router>
@@ -25,8 +26,9 @@ const PageRoutes = () => (
         <Route path="/buyer/order-milk" element={<OrderMilk />} />
         <Route path="/buyer/my-orders" element={<MyOrders />} />
         {/* New: Group Buy and Today's Accounts */}
-        <Route path="/buyer/group-buy" element={<GroupBuy />} />
+        {/* <Route path="/buyer/group-buy" element={<GroupBuy />} /> */}
         <Route path="/buyer/todays-accounts" element={<TodaysAccounts />} />
+        <Route path="/buyer/other-products" element={<OtherProducts />} />
         {/* Seller */}
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
         {/* Default route: redirect all unknown routes to splash */}

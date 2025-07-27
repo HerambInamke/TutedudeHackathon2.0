@@ -28,19 +28,25 @@ const BuyerDashboard = () => {
             label="My Orders"
             onClick={() => navigate("/buyer/my-orders")}
           />
-          <IconCard
+          {/* <IconCard
             icon={<Users2 className="h-9 w-9 text-emerald-400" />}
             label="Group Buy"
             onClick={() => setModal("group")}
-          />
+          /> */}
           <IconCard
             icon={<FileText className="h-9 w-9 text-orange-400" />}
             label="Today's Accounts"
             onClick={() => setModal("accounts")}
           />
+          <IconCard
+            icon={<Package2 className="h-9 w-9 text-emerald-600" />}
+            label="Order Other Products"
+            onClick={() => navigate("/buyer/other-products")}
+          />
         </div>
       </div>
       {/* Placeholder modals */}
+      {/*
       <Modal
         isOpen={modal === "group"}
         onClose={() => setModal(null)}
@@ -50,6 +56,7 @@ const BuyerDashboard = () => {
           Group Buy feature coming soon!
         </div>
       </Modal>
+      */}
       <Modal
         isOpen={modal === "accounts"}
         onClose={() => setModal(null)}
